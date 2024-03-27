@@ -2,14 +2,82 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wini.restapitemplate.user.mapper.UserMapper">
 
-    <select id="getUser" resultType="com.wini.restapitemplate.user.model.User">
-        SELECT id, name
-        FROM users
-        WHERE id = #{id}
+    <select id="getAllUser" parameterType="User" resultType="User">
+        SELECT *
+        FROM user_info
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="user_sn != null and user_sn != ''">
+                AND user_sn = #{user_sn}
+            </if>
+            <if test="user_id != null and user_id != ''">
+                AND user_id = #{user_id}
+            </if>
+            <if test="user_nm != null and user_nm != ''">
+                AND user_nm like CONCAT('%', #{user_nm}, '%')
+            </if>
+            <if test="user_tel != null and user_tel != ''">
+                AND user_tel like CONCAT('%', #{user_tel}, '%')
+            </if>
+            <if test="use_yn != null and use_yn != ''">
+                AND use_yn = #{use_yn}
+            </if>
+        </trim>
+        ORDER BY user_sn DESC
     </select>
 
-    <insert id="insertUser">
-        INSERT INTO users(id, name, password, enabled)
-        VALUES (#{id}, #{name}, #{password}, true)
+    <select id="getUser" parameterType="String" resultType="User">
+        SELECT *
+        FROM user_info
+        WHERE
+            user_id = #{user_id}
+        ORDER BY user_sn DESC
+    </select>
+
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyColumn="user_sn" keyProperty="user_sn">
+        INSERT INTO user_info(user_sn, user_id, user_pwd, user_nm, user_tel, user_agree_yn, use_yn, reg_date, upd_date)
+        VALUES (
+                   nextval('user_sn_seq'),
+                   #{user_id},
+                   #{user_pwd},
+                   #{user_nm},
+                   #{user_tel},
+                   #{user_agree_yn},
+                   'Y',
+                   FORMATDATETIME(NOW(), 'yyyyMMddHHmmss'),
+                   FORMATDATETIME(NOW(), 'yyyyMMddHHmmss')
+               )
     </insert>
+
+    <update id="updateUser" parameterType="User">
+        UPDATE user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="user_pwd != null and user_pwd != ''">
+                user_pwd = #{user_pwd},
+            </if>
+            <if test="user_nm != null and user_nm != ''">
+                user_nm = #{user_nm},
+            </if>
+            <if test="user_tel != null and user_tel != ''">
+                user_tel = #{user_tel},
+            </if>
+            <if test="user_agree_yn != null and user_agree_yn != ''">
+                user_agree_yn = #{user_agree_yn},
+            </if>
+            <if test="use_yn != null and use_yn != ''">
+                use_yn = #{use_yn},
+            </if>
+            upd_date = FORMATDATETIME(NOW(), 'yyyyMMddHHmmss')
+        </trim>
+        WHERE
+        user_id = #{user_id}
+    </update>
+
+    <delete id="deleteUser" parameterType="String">
+        UPDATE user_info
+        SET
+            use_yn = 'N',
+            upd_date = FORMATDATETIME(NOW(), 'yyyyMMddHHmmss')
+        WHERE
+            user_id = #{user_id}
+    </delete>
 </mapper>

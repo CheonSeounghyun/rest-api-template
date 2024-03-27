@@ -3,15 +3,14 @@ package com.wini.restapitemplate.api;
 import lombok.Data;
 
 @Data
-public class ApiResponse {
+public class ApiErrorResponse {
     private String status;
     private String message;
-    private Object data;
+    private Object detail;
 
-    public ApiResponse(String status, String message, Object data) {
+    public ApiErrorResponse(String status, String message, Object detail) {
         this.status = status;
         this.message = message;
-        this.data = data;
+        this.detail = detail;
     }
-
 }
