@@ -34,14 +34,13 @@
     </select>
 
     <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyColumn="user_sn" keyProperty="user_sn">
-        INSERT INTO user_info(user_sn, user_id, user_pwd, user_nm, user_tel, user_agree_yn, use_yn, reg_date, upd_date)
+        INSERT INTO user_info(user_sn, user_id, user_pwd, user_nm, user_tel, use_yn, reg_date, upd_date)
         VALUES (
                    nextval('user_sn_seq'),
                    #{user_id},
                    #{user_pwd},
                    #{user_nm},
                    #{user_tel},
-                   #{user_agree_yn},
                    'Y',
                    FORMATDATETIME(NOW(), 'yyyyMMddHHmmss'),
                    FORMATDATETIME(NOW(), 'yyyyMMddHHmmss')
@@ -59,9 +58,6 @@
             </if>
             <if test="user_tel != null and user_tel != ''">
                 user_tel = #{user_tel},
-            </if>
-            <if test="user_agree_yn != null and user_agree_yn != ''">
-                user_agree_yn = #{user_agree_yn},
             </if>
             <if test="use_yn != null and use_yn != ''">
                 use_yn = #{use_yn},

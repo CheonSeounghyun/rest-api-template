@@ -1,6 +1,8 @@
 package com.wini.restapitemplate.config;
 
+import com.wini.restapitemplate.custom.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +16,9 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    @Autowired
+    private final CustomAuthenticationEntryPoint customAutehticationEntryPoint;
 
     private final ApiKeyAuthFilter apiKeyAuthFilter;
 
@@ -31,7 +36,10 @@ public class SecurityConfig {
                 .and()
                 .addFilter(apiKeyAuthFilter).authorizeRequests()
             .antMatchers("/h2-console/**")
-                .permitAll().anyRequest().authenticated();
+                .permitAll().anyRequest().authenticated()
+            .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(customAutehticationEntryPoint);
 
         return http.build();
     }
