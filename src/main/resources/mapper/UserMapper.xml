@@ -69,7 +69,7 @@
     </update>
 
     <delete id="deleteUser" parameterType="String">
-        UPDATE user_info SET
+        UPDATE user_info
         SET
             use_yn = 'N',
             upd_date = FORMATDATETIME(NOW(), 'yyyyMMddHHmmss')
