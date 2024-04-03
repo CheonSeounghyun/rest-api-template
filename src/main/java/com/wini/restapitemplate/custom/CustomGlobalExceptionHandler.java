@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -42,5 +43,15 @@ public class CustomGlobalExceptionHandler {
         logger.error("message", exception);
 
         return ResponseEntity.status(400).body(new ApiErrorResponse(ApiResponseConstants.STATUS_FAIL, message, null));
+    }
+
+    @ExceptionHandler(BadSqlGrammarException.class)
+    public ResponseEntity<Object> handleBadSqlGrammarException(BadSqlGrammarException exception) {
+
+        String message = ApiResponseConstants.MESSAGE_INTERNAL_SERVER_ERROR;
+
+        logger.error("message", exception);
+
+        return ResponseEntity.status(400).body(new ApiErrorResponse(ApiResponseConstants.STATUS_ERROR, message, "Bad Sql Grammar Exception"));
     }
 }

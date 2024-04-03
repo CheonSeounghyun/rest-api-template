@@ -17,6 +17,4 @@ public class ApiResponseConstants {
     public static final String MESSAGE_DATA_DELETE_SUCCESS = "%s information deleted.";
 
     public static final String MESSAGE_API_ACCESS_DENIED = "Invalid API KEY.";
-    public static final String MESSAGE_API_KEY_CREATE_SUCCESS = "API KEY created.";
-    public static final String MESSAGE_API_KEY_EXPIRE_SUCCESS = "API KEY expired.";
 }

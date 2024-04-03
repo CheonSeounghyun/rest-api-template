@@ -18,20 +18,16 @@ public class CustomErrorAttributes extends DefaultErrorAttributes {
 
     @Override
     public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
-        Exception ex = (Exception) webRequest.getAttribute("org.springframework.web.servlet.DispatcherServlet.EXCEPTION",0);
+//        Exception ex = (Exception) webRequest.getAttribute("org.springframework.web.servlet.DispatcherServlet.EXCEPTION",0);
+        Exception ex = (Exception) webRequest.getAttribute("org.springframework.boot.web.servlet.error.DefaultErrorAttributes.ERROR",0);
         Map<String, Object> result = super.getErrorAttributes(webRequest, options.excluding(ErrorAttributeOptions.Include.STACK_TRACE));
         Map<String, Object> resultBody = new LinkedHashMap<>();
 
         resultBody.put("status", ApiResponseConstants.STATUS_ERROR);
         resultBody.put("message", result.get("error"));
 
-
-        if(ex != null){
-            logger.error("message", ex);
-            resultBody.put("detail", ex.getMessage());
-        }else{
-            resultBody.put("detail", result.get("message"));
-        }
+        logger.error("message", ex);
+        resultBody.put("detail", ex.getMessage());
 
         return resultBody;
     }
